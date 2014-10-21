@@ -20,8 +20,15 @@
 </body>
   <script id="script">
     var sw = navigator.serviceWorker;
-    if (sw.controller) {
-      sw.getRegistration(document.location).then(function(reg) { return reg.unregister(); }).then(function() { console.log("Unregister Successful") }).catch(function(e) { console.log("No Service Worker: " + e)});
+    if (sw && sw.controller) {
+      sw.getRegistration(document.location).then(function(reg) { 
+        var req = window.indexedDB.deleteDatabase("cache-polyfill");
+        req.onsuccess = function () { console.log("Deleted Cache successfully"); };
+        req.onerror = function () { console.log("Couldn't delete Cache database"); };
+        req.onblocked = function () { console.log("Couldn't delete Cache database. Operation being blocked"); };
+        
+        return reg.unregister();
+      }).then(function() { console.log("Unregister Successful") }).catch(function(e) { console.log("No Service Worker: " + e)});
     }
   </script>
 </html>
