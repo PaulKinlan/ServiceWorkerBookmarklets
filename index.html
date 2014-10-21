@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookmarklet</title>
+  <script>
+    window.onload = function(e) {
+      var bookmark = document.getElementById("bookmark");
+      var code = document.getElementById("code");
+      var script = document.getElementById("script");
+      bookmark.href = "javascript: "+ encodeURIComponent("(function() { " + script.textContent + "}())");
+      
+    };
+  </script>
+</head>
+<body>
+  <a id="bookmark" href="">Unregsiter Service Worker</a>
+  <div id="code"></div>
+</body>
+  <script id="script">
+    var sw = navigator.serviceWorker;
+    if (sw.controller) {
+      sw.getRegistration(document.location).then(function(reg) { return reg.unregister(); }).then(function() { console.log("Unregister Successful") }).catch(function(e) { console.log("No Service Worker: " + e)});
+    }
+  </script>
+</html>
